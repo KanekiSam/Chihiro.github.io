@@ -1,0 +1,56 @@
+.blog {
+  .container {
+    display: flex;
+    .left {
+      width: 500px;
+      .block {
+        width: 350px;
+        margin-left: 50px;
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #f0f0f0;
+      }
+      .userCard {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 100%;
+        }
+        .name {
+          width: 16px;
+        }
+        .describe {
+          writing-mode: vertical-lr;
+          writing-mode: tb-lr;
+          height: 160px;
+        }
+      }
+      .tags {
+        .tagsTitle {
+          font-size: 16px;
+          font-weight: 600;
+        }
+        ul {
+          li {
+            list-style-type: none;
+          }
+        }
+      }
+    }
+    .body {
+      flex: 1;
+    }
+  }
+  .header {
+    display: flex;
+    justify-content: center;
+    .menu {
+    }
+    .search {
+    }
+  }
+}
