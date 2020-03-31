@@ -9,10 +9,11 @@ export default defineConfig({
         { path: '/', component: 'index' },
         { path: '/blog', component: 'blog/index' },
         { path: '/myBlog', component: 'myBlog/index' },
+        { path: '/editor', component: 'editor/index' },
+        { path: '/ueditorWrap', component: 'editor/ueditorWrap' },
       ],
     },
   ],
   antd: {},
   publicPath: '/static/',
-  plugins: [['ifanrx-react-ueditor', {}]],
 });

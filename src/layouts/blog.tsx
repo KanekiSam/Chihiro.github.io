@@ -61,8 +61,8 @@ const BlogLayout: React.FC<Props> = props => {
             <div key={key} className={`${styles.tags} ${styles.block}`}>
               <div className={styles.tagsTitle}>{item.label}</div>
               <ul>
-                {item.list.map(item2 => (
-                  <li>{item2.name}</li>
+                {item.list.map((item2, key2) => (
+                  <li key={key2}>{item2.name}</li>
                 ))}
               </ul>
             </div>
