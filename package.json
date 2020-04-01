@@ -19,11 +19,16 @@
     ]
   },
   "dependencies": {
+    "@umijs/hooks": "^1.8.1",
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.0.14",
     "antd": "^4.1.0",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
     "ifanrx-react-ueditor": "^2.3.0",
     "lint-staged": "^10.0.7",
+    "multer": "^1.4.2",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

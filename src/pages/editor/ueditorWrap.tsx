@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import RcUeditor from 'react-ueditor-wrap';
 import { Button } from 'antd';
 import fs from 'fs';
+import axios from 'axios';
+import { history } from 'umi';
 
 interface UeditorData {
   createTime: number | null;
@@ -22,7 +24,13 @@ const UeditorWrap: React.FC<Props> = props => {
     setData(data);
   };
   const onSave = () => {
-    const path = `../../data/ueditor/${data.createTime}.ts`;
+    axios.post('/article/create', data).then(res => {
+      // tslint:disable-next-line:no-console
+      console.log(res);
+      if (res.status == 200) {
+        history.push('/myBlog');
+      }
+    });
   };
   return (
     <div>

@@ -16,4 +16,10 @@ export default defineConfig({
   ],
   antd: {},
   publicPath: '/static/',
+  proxy: {
+    '/article': {
+      target: 'http://10.0.26.174:5000',
+      changeOrigin: false,
+    },
+  },
 });
