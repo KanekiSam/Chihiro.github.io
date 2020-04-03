@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, Input } from 'antd';
-import { MenuLists } from '@/data/header';
+import { MenuLists, IMenuLists } from '@/data/header';
 import { Link } from 'umi';
 import styles from './index.less';
 import { user } from '@/data/user';
@@ -12,8 +12,27 @@ interface Props {
 }
 const BlogLayout: React.FC<Props> = props => {
   const [selectKeys, setSelectKeys] = useState<string[]>(['/']);
+  const getGroupLists = (list: IMenuLists, array: string[]): string[] => {
+    const data = [...array];
+    data.push(list.path);
+    if (list.children) {
+      data.push(...list.children.map(item => item.path));
+      list.children.forEach(item => {
+        data.push(...getGroupLists(item, []));
+      });
+    }
+    return data;
+  };
   useEffect(() => {
-    setSelectKeys([props.location?.pathname]);
+    for (var item of MenuLists) {
+      const data = getGroupLists(item, []);
+      if (data.indexOf(props.location?.pathname) > -1) {
+        if (data?.[0]) {
+          setSelectKeys([data?.[0]]);
+          break;
+        }
+      }
+    }
   }, [props.location?.pathname]);
 
   return (

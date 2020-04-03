@@ -2,35 +2,60 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var bodyParser = require('body-parser');
+const {
+  creatFile,
+  deleteFile,
+  getDirData,
+  getOneFileData,
+  editFileData,
+} = require('./file');
 // var multer = require('multer');
 // var upload = multer();
 
 var app = express();
 // var router = express.Router();
 var port = 5000;
+const basePath = path.join(__dirname, 'file');
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/article/get/all', function(req, res) {
-  var list = [];
-  const data = fs.readdirSync(path.join(__dirname, 'file'));
-  data.forEach((item, i) => {
-    var data2 = fs.readFileSync(path.join(__dirname, 'file', item), 'utf8');
-    list.push(JSON.parse(data2));
-  });
-  res.status(200).send(list);
+  var result = getDirData(basePath);
+  res.status(result.status).send(result.data);
+});
+app.get('/article/get/one', (req, res) => {
+  if (req.query && req.query.createTime) {
+    var createTime = req.query.createTime;
+    const result = getOneFileData(path.join(basePath, `${createTime}.txt`));
+    res.status(result.status).send(result.data);
+  }
+  res.status(400).send('参数错误');
+});
+app.delete('/article/delete/one', (req, res) => {
+  if (req.query && req.query.createTime) {
+    var createTime = req.query.createTime;
+    var result = deleteFile(path.join(basePath, `${createTime}.txt`));
+    res.status(result.status).send(result.data);
+  }
+  res.status(400).send('参数错误');
+});
+app.put('/article/edit/one', (req, res) => {
+  if (req.body) {
+    var createTime = req.body.createTime;
+    var result = editFileData(
+      path.join(basePath, `${createTime}.txt`),
+      req.body.content,
+    );
+    res.status(result.status).send(result.data);
+  }
+  res.status(400).send('参数错误');
 });
 app.post('/article/create', function(req, res) {
   if (req.body) {
-    try {
-      var pathway = path.join(__dirname, `file/${req.body.createTime}.txt`);
-      fs.writeFile(pathway, JSON.stringify(req.body), err => {
-        console.log(err);
-      });
-      res.status(200).send('success');
-    } catch {
-      res.status(400).send('出现错误');
-    }
+    req.body.createTime = new Date().getTime();
+    var pathway = path.join(basePath, `${req.body.createTime}.txt`);
+    var result = creatFile(pathway, req.body);
+    res.status(result.status).send(result.data);
   } else {
     res.status(500).send('参数错误');
   }
