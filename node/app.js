@@ -40,11 +40,11 @@ app.delete('/article/delete/one', (req, res) => {
   res.status(400).send('参数错误');
 });
 app.put('/article/edit/one', (req, res) => {
-  if (req.body) {
-    var createTime = req.body.createTime;
+  if (req.body && req.body.id) {
+    var createTime = req.body.id;
     var result = editFileData(
       path.join(basePath, `${createTime}.txt`),
-      req.body.content,
+      req.body,
     );
     res.status(result.status).send(result.data);
   }

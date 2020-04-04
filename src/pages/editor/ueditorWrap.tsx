@@ -19,26 +19,13 @@ const UeditorWrap: React.FC<Props> = props => {
   const onChange = (val: any) => {
     setContentData(val);
   };
-  // const { loading: submitLoading, run: onSubmit } = useAsync(
-  //   data => {
-  //     return axios[props.location?.query?.key ? 'put' : 'post'](
-  //       '/article/edit/one',
-  //       data,
-  //     ).then(res => {
-  //       if (res.status == 200) {
-  //         message.success(res.data);
-  //         history.push('/myBlog');
-  //       } else {
-  //         message.error(res.data);
-  //       }
-  //     });
-  //   },
-  //   { manual: true },
-  // );
   const onSave = () => {
+    if (!contentData) {
+      return message.warning('文章内容不能为空');
+    }
     setVisible(true);
   };
-  const { loading, run } = useAsync(
+  const { loading, run, data: result } = useAsync(
     () => {
       return axios.get('/article/get/one', {
         params: { createTime: props.location.query.key },
@@ -51,8 +38,6 @@ const UeditorWrap: React.FC<Props> = props => {
       run();
     }
   }, []);
-  // tslint:disable-next-line:no-console
-  console.log(props.location?.query?.key);
   return (
     <div>
       <Spin spinning={loading}>
@@ -62,9 +47,8 @@ const UeditorWrap: React.FC<Props> = props => {
         <RcUeditor
           editorConfig={{
             initialFrameHeight: 700,
-            initialContent: '哈哈哈',
-            // initialContent: result?.data?.content,
           }}
+          value={result?.data?.content}
           onChange={onChange}
         />
         <EditModal
@@ -72,6 +56,7 @@ const UeditorWrap: React.FC<Props> = props => {
           onToggle={bool => setVisible(bool)}
           articleData={contentData}
           id={props.location?.query?.key}
+          initData={result?.data}
         />
       </Spin>
     </div>

@@ -1,0 +1,45 @@
+@border: 1px solid #f0f0f0;
+.addLabelModule {
+  position: relative;
+  .labelModule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    background: white;
+    border: @border;
+    padding: 10px;
+    .closeBtn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+    .labelBlock {
+      display: inline-block;
+      border: @border;
+      padding: 3px 10px;
+      border-radius: 3px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      &:hover {
+        border-color: #1890ff;
+      }
+    }
+  }
+}
+.categoryLists {
+  .category {
+    display: inline-block;
+    padding: 3px 10px;
+    border: @border;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .icon {
+    font-size: 12px;
+    position: relative;
+    left: 5px;
+    top: -5px;
+  }
+}

@@ -1,8 +1,15 @@
 .blog {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
   .container {
     display: flex;
+    overflow-y: auto;
+    flex: 1;
     .left {
       width: 500px;
+      overflow-y: auto;
       .block {
         width: 350px;
         margin-left: 50px;
@@ -43,11 +50,13 @@
     }
     .body {
       flex: 1;
+      overflow-y: auto;
     }
   }
   .header {
     display: flex;
     justify-content: center;
+    height: 58px;
     .menu {
     }
     .search {

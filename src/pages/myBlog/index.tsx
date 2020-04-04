@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Spin, Modal, message } from 'antd';
+import { Button, Card, Spin, Modal, message, Tag } from 'antd';
 import { history } from 'umi';
 import styles from './index.less';
 import { useAsync } from '@umijs/hooks';
@@ -15,9 +15,14 @@ interface Props {}
 const MyBlog: React.FC<Props> = props => {
   const { data, loading, run: init } = useAsync(
     () => {
-      return Axios.get<{ content: string; createTime: number }[]>(
-        '/article/get/all',
-      );
+      return Axios.get<
+        {
+          content: string;
+          createTime: number;
+          typeDescribe: string;
+          type: number;
+        }[]
+      >('/article/get/all');
     },
     { manual: true },
   );
@@ -60,7 +65,17 @@ const MyBlog: React.FC<Props> = props => {
       <Spin spinning={loading}>
         {data &&
           data.data.map((item, i) => (
-            <Card className={styles.card_block} key={i}>
+            <Card
+              className={styles.card_block}
+              key={i}
+              extra={
+                item.typeDescribe && (
+                  <Tag color={item.type == 0 ? 'error' : 'success'}>
+                    {item.typeDescribe}
+                  </Tag>
+                )
+              }
+            >
               <div
                 className={styles.body}
                 dangerouslySetInnerHTML={{ __html: item.content }}

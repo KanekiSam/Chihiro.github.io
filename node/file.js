@@ -56,7 +56,7 @@ module.exports = {
     try {
       var data2 = fs.readFileSync(path.join(pathway), 'utf8');
       var data2 = JSON.parse(data2);
-      data2.content = data;
+      Object.assign(data2, data);
       fs.writeFileSync(pathway, JSON.stringify(data2));
       result.status = 200;
       result.data = '修改成功';
