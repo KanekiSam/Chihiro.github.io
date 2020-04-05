@@ -21,6 +21,7 @@ const MyBlog: React.FC<Props> = props => {
           createTime: number;
           typeDescribe: string;
           type: number;
+          articleType: string;
         }[]
       >('/article/get/all');
     },
@@ -75,6 +76,7 @@ const MyBlog: React.FC<Props> = props => {
                   </Tag>
                 )
               }
+              title={item.articleType}
             >
               <div
                 className={styles.body}

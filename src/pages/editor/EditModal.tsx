@@ -171,14 +171,14 @@ const EditModal: React.FC<Props> = props => {
             </div>
           </Form.Item>
         </Form.Item>
-        <Form.Item label="文章类型" name="articleType">
+        <Form.Item label="文章类型" name="articleType" required>
           <Select>
             <Select.Option value="原创">原创</Select.Option>
             <Select.Option value="转载">转载</Select.Option>
             <Select.Option value="翻译">翻译</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="发布形式" name="outputShape">
+        <Form.Item label="发布形式" name="outputShape" required>
           <Radio.Group>
             <Radio value="公开">公开</Radio>
             <Radio value="私密">私密</Radio>
