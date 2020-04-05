@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styles from './index.less';
 import { user } from '@/data/user';
+import { history } from 'umi';
 
 export default () => {
   const starRef = useRef<HTMLDivElement>(null);
@@ -24,6 +25,9 @@ export default () => {
           <img src={require('../static/avatar.png')} alt="" />
         </div>
         <div className={styles.describe}>{user.describe}</div>
+        <div className={styles.linker} onClick={() => history.push('/blog')}>
+          开始旅行>>
+        </div>
       </div>
     </div>
   );
