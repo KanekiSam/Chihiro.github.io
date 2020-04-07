@@ -11,6 +11,8 @@ export default defineConfig({
         { path: '/myBlog', component: 'myBlog/index' },
         { path: '/editor', component: 'editor/index' },
         { path: '/ueditorWrap', component: 'editor/ueditorWrap' },
+        { path: '/login', component: 'login/index' },
+        { path: '/register', component: 'login/register' },
       ],
     },
   ],

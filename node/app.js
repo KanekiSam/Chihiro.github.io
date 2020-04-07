@@ -60,6 +60,26 @@ app.post('/article/create', function(req, res) {
     res.status(500).send('参数错误');
   }
 });
+app.post('/article/register', function(req, res) {
+  if (req.body) {
+    const user = req.body.user;
+    var pathway = path.join(__dirname, 'user/index.txt');
+    const result = getOneFileData(pathway);
+    if (result.status == 200) {
+      var arr = JSON.parse(result.data) || [];
+      const data = arr.find(item => item.user == user);
+      if (data) {
+        res.status(201).send('该用户已注册');
+      }
+      var result2 = creatFile(pathway, [...arr, req.body]);
+      res.status(result2.status).send(result2.data);
+    } else {
+      res.status(result.status).send(result.data);
+    }
+  } else {
+    res.status(500).send('参数错误');
+  }
+});
 app.listen(port, function() {
   console.log('Server runninf at ' + port + ' port');
 });

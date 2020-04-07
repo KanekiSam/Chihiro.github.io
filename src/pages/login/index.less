@@ -1,0 +1,24 @@
+@border: 1px solid #f0f0f0;
+.formContent {
+  border-top: 1px solid transparent;
+  .formModule {
+    width: 500px;
+    height: 800px;
+    overflow: auto;
+    border: @border;
+    padding: 10px;
+    padding-right: 50px;
+    padding-top: 30px;
+    margin: 0 auto;
+    margin-top: 80px;
+    .dynamicblock {
+      position: relative;
+      .dynamicDeleteButton {
+        font-size: 24px;
+        position: absolute;
+        bottom: 0;
+        right: -35px;
+      }
+    }
+  }
+}

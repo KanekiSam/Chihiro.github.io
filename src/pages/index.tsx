@@ -18,6 +18,11 @@ export default () => {
   }, []);
   return (
     <div className={styles.homeModule}>
+      <div className={styles.goto}>
+        <a onClick={() => history.push('/login')}>登录</a>
+        <span style={{ margin: 3 }}>/</span>
+        <a onClick={() => history.push('/register')}>注册</a>
+      </div>
       <div className={styles.starModule} ref={starRef}></div>
       <div className={styles.center}>
         <div className={styles.userName}>{user.name}</div>

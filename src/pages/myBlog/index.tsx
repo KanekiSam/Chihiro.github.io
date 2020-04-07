@@ -22,6 +22,7 @@ const MyBlog: React.FC<Props> = props => {
           typeDescribe: string;
           type: number;
           articleType: string;
+          title: string;
         }[]
       >('/article/get/all');
     },
@@ -64,47 +65,46 @@ const MyBlog: React.FC<Props> = props => {
         新增
       </Button>
       <Spin spinning={loading}>
-        {data &&
-          data.data.map((item, i) => (
-            <Card
-              className={styles.card_block}
-              key={i}
-              extra={
-                item.typeDescribe && (
-                  <Tag color={item.type == 0 ? 'error' : 'success'}>
-                    {item.typeDescribe}
-                  </Tag>
-                )
-              }
-              title={item.articleType}
-            >
-              <div
-                className={styles.body}
-                dangerouslySetInnerHTML={{ __html: item.content }}
-              ></div>
-              <div className={styles.footer}>
-                <span className={styles.time}>
-                  {format(new Date(item.createTime), 'yyyy-MM-dd hh:mm:ss')}
-                </span>
-                <span className={styles.tool}>
-                  <EditOutlined
-                    onClick={() => {
-                      history.push({
-                        pathname: '/ueditorWrap',
-                        query: { key: item.createTime },
-                      });
-                    }}
-                  />
-                  &#x3000;
-                  {deleteLoading ? (
-                    <LoadingOutlined />
-                  ) : (
-                    <DeleteOutlined onClick={() => ondelete(item.createTime)} />
-                  )}
-                </span>
-              </div>
-            </Card>
-          ))}
+        {(data?.data ?? []).map((item, i) => (
+          <Card
+            className={styles.card_block}
+            key={i}
+            extra={
+              item.typeDescribe && (
+                <Tag color={item.type == 0 ? 'error' : 'success'}>
+                  {item.typeDescribe}
+                </Tag>
+              )
+            }
+            title={item.title}
+          >
+            <div
+              className={styles.body}
+              dangerouslySetInnerHTML={{ __html: item.content }}
+            ></div>
+            <div className={styles.footer}>
+              <span className={styles.time}>
+                {format(new Date(item.createTime), 'yyyy-MM-dd hh:mm:ss')}
+              </span>
+              <span className={styles.tool}>
+                <EditOutlined
+                  onClick={() => {
+                    history.push({
+                      pathname: '/ueditorWrap',
+                      query: { key: item.createTime },
+                    });
+                  }}
+                />
+                &#x3000;
+                {deleteLoading ? (
+                  <LoadingOutlined />
+                ) : (
+                  <DeleteOutlined onClick={() => ondelete(item.createTime)} />
+                )}
+              </span>
+            </div>
+          </Card>
+        ))}
       </Spin>
     </div>
   );

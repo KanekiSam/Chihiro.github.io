@@ -8,13 +8,4 @@ export const category = [
       { name: 'angular' },
     ],
   },
-  {
-    label: '归档',
-    list: [
-      { name: '九月 2019' },
-      { name: '五月 2019' },
-      { name: '四月 2019' },
-      { name: '三月 2019' },
-    ],
-  },
 ];

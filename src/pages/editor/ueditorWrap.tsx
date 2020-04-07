@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import RcUeditor from 'react-ueditor-wrap';
-import { Button, Spin, message } from 'antd';
+import { Button, Spin, message, Input } from 'antd';
 import axios from 'axios';
-import { history } from 'umi';
 import { useAsync } from '@umijs/hooks';
 import EditModal from './EditModal';
+import styles from './index.less';
 
 interface UeditorData {
   createTime: number | null;
@@ -16,12 +16,17 @@ interface Props {
 const UeditorWrap: React.FC<Props> = props => {
   const [contentData, setContentData] = useState('');
   const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState('');
+  const key = props.location?.query?.key;
   const onChange = (val: any) => {
     setContentData(val);
   };
   const onSave = () => {
     if (!contentData) {
       return message.warning('文章内容不能为空');
+    }
+    if (!title) {
+      return message.warning('文章标题不能为空');
     }
     setVisible(true);
   };
@@ -34,27 +39,45 @@ const UeditorWrap: React.FC<Props> = props => {
     { manual: true },
   );
   useEffect(() => {
-    if (props.location?.query?.key) {
+    if (key) {
       run();
     }
   }, []);
+  useEffect(() => {
+    if (result?.data) {
+      setTitle(result?.data?.title);
+    }
+  }, [result]);
   return (
-    <div>
+    <div style={{ marginTop: 10 }}>
       <Spin spinning={loading}>
-        <Button type="primary" onClick={onSave} style={{ margin: '10px 0' }}>
-          保存
-        </Button>
-        <RcUeditor
-          editorConfig={{
-            initialFrameHeight: 700,
-          }}
-          value={result?.data?.content}
-          onChange={onChange}
-        />
+        <div className={styles.titleForm}>
+          <span className={`${styles.label} ${styles.required}`}>文章名称</span>
+          <Input
+            value={title}
+            onChange={ev => setTitle(ev.target.value)}
+            style={{ width: 300 }}
+            className={styles.input}
+            maxLength={20}
+            placeholder="最多20字"
+          />
+          <Button type="primary" onClick={onSave} style={{ margin: '10px 0' }}>
+            保存
+          </Button>
+        </div>
+        {(!key || result?.data) && (
+          <RcUeditor
+            editorConfig={{
+              initialFrameHeight: 680,
+            }}
+            value={!key ? '' : result?.data?.content}
+            onChange={onChange}
+          />
+        )}
         <EditModal
           visible={visible}
           onToggle={bool => setVisible(bool)}
-          articleData={contentData}
+          articleData={{ title, content: contentData }}
           id={props.location?.query?.key}
           initData={result?.data}
         />

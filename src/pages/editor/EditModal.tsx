@@ -33,7 +33,7 @@ interface Props {
   visible: boolean;
   onToggle: (bool: boolean) => void;
   id?: number;
-  articleData: string;
+  articleData: { content: string; title: string };
   initData: any;
 }
 const EditModal: React.FC<Props> = props => {
@@ -61,8 +61,8 @@ const EditModal: React.FC<Props> = props => {
     form.validateFields().then(values => {
       onsubmit({
         ...values,
+        ...props.articleData,
         type,
-        content: props.articleData,
         typeDescribe: type == 0 ? '草稿' : '已发布',
         id: props.id,
       });
@@ -97,6 +97,7 @@ const EditModal: React.FC<Props> = props => {
     <Modal
       title="发布文章"
       visible={props.visible}
+      getContainer={false}
       onCancel={() => {
         props.onToggle(false);
       }}
@@ -122,8 +123,12 @@ const EditModal: React.FC<Props> = props => {
       ]}
     >
       <Form wrapperCol={{ span: 14 }} labelCol={{ span: 6 }} form={form}>
-        <Form.Item label="文章标签">
-          <Form.Item noStyle name="category">
+        <Form.Item label="文章标签" required>
+          <Form.Item
+            noStyle
+            name="category"
+            rules={[{ required: true, message: '文章标签不能为空' }]}
+          >
             <CategoryList deleteLabel={deleteLabel} />
           </Form.Item>
           <Form.Item noStyle>
@@ -171,14 +176,22 @@ const EditModal: React.FC<Props> = props => {
             </div>
           </Form.Item>
         </Form.Item>
-        <Form.Item label="文章类型" name="articleType" required>
+        <Form.Item
+          label="文章类型"
+          name="articleType"
+          rules={[{ required: true, message: '文章类型不能为空' }]}
+        >
           <Select>
             <Select.Option value="原创">原创</Select.Option>
             <Select.Option value="转载">转载</Select.Option>
             <Select.Option value="翻译">翻译</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="发布形式" name="outputShape" required>
+        <Form.Item
+          label="发布形式"
+          name="outputShape"
+          rules={[{ required: true, message: '发布形式不能为空' }]}
+        >
           <Radio.Group>
             <Radio value="公开">公开</Radio>
             <Radio value="私密">私密</Radio>

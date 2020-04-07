@@ -43,3 +43,21 @@
     top: -5px;
   }
 }
+.titleForm {
+  .label {
+    &::after {
+      content: ':';
+      margin: 3px;
+    }
+  }
+  .required {
+    &::before {
+      content: '*';
+      margin: 3px;
+      color: red;
+    }
+  }
+  .input {
+    margin-right: 10px;
+  }
+}

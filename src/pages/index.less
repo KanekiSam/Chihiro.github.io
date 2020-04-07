@@ -5,6 +5,13 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
+  .goto {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 100;
+  }
   .starModule {
     position: absolute;
     width: 100%;
@@ -141,12 +148,20 @@
   }
 }
 @keyframes stars {
-  from {
+  0% {
     width: 2px;
     background: blue;
   }
-  to {
+  50% {
     width: 1px;
-    // background: white;
+    background: rgba(24, 144, 255, 0.7);
+  }
+  70% {
+    width: 2px;
+    background: rgba(24, 144, 255, 0.3);
+  }
+  100% {
+    width: 2px;
+    background: blue;
   }
 }

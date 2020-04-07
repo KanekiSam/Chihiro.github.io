@@ -2,6 +2,25 @@ var fs = require('fs');
 var path = require('path');
 
 var result = { status: null, data: null };
+var createFolder = function(to) {
+  //文件写入
+  var sep = path.sep;
+  var folders = path.dirname(to).split(sep);
+  var p = '';
+  while (folders.length) {
+    p += folders.shift() + sep;
+    if (!fs.existsSync(p)) {
+      fs.mkdirSync(p);
+    }
+  }
+};
+const checkFile = pathway => {
+  var isexist = fs.existsSync(pathway);
+  if (!isexist) {
+    createFolder(pathway);
+    fs.createWriteStream(pathway);
+  }
+};
 module.exports = {
   creatFile: function(pathway, data) {
     try {
@@ -43,6 +62,7 @@ module.exports = {
   },
   getOneFileData: function(pathway) {
     try {
+      checkFile(pathway);
       const data = fs.readFileSync(pathway, 'utf8');
       result.status = 200;
       result.data = data;
