@@ -13,6 +13,7 @@ export default defineConfig({
         { path: '/ueditorWrap', component: 'editor/ueditorWrap' },
         { path: '/login', component: 'login/index' },
         { path: '/register', component: 'login/register' },
+        { path: '/retrieve', component: 'login/retrievePassword' },
       ],
     },
   ],

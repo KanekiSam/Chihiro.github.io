@@ -8,7 +8,7 @@ interface Props {
 }
 const Layouts: React.FC<Props> = props => {
   const path = props.location.pathname;
-  if (['/', '/login', '/register'].indexOf(path) > -1) {
+  if (['/', '/login', '/register', '/retrieve'].indexOf(path) > -1) {
     return <EmptyLayout {...props} />;
   } else if (['/blog'].indexOf(path) > -1) {
     return <CommonLayout {...props} />;

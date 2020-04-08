@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styles from './index.less';
 import { user } from '@/data/user';
 import { history } from 'umi';
+import axios from 'axios';
 
 export default () => {
   const starRef = useRef<HTMLDivElement>(null);
@@ -15,6 +16,7 @@ export default () => {
       starRef.current?.appendChild(star);
     }
     // }, 100);
+    axios.get('/article/get/user').then(res => {});
   }, []);
   return (
     <div className={styles.homeModule}>

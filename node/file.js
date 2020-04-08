@@ -14,14 +14,14 @@ var createFolder = function(to) {
     }
   }
 };
-const checkFile = pathway => {
-  var isexist = fs.existsSync(pathway);
-  if (!isexist) {
-    createFolder(pathway);
-    fs.createWriteStream(pathway);
-  }
-};
 module.exports = {
+  checkFile: pathway => {
+    var isexist = fs.existsSync(pathway);
+    if (!isexist) {
+      createFolder(pathway);
+      fs.createWriteStream(pathway);
+    }
+  },
   creatFile: function(pathway, data) {
     try {
       fs.writeFileSync(pathway, JSON.stringify(data));
@@ -48,6 +48,7 @@ module.exports = {
     try {
       var list = [];
       const data = fs.readdirSync(pathway);
+      console.log(data);
       data.forEach((item, i) => {
         var data2 = fs.readFileSync(path.join(pathway, item), 'utf8');
         list.push(JSON.parse(data2));
@@ -62,13 +63,16 @@ module.exports = {
   },
   getOneFileData: function(pathway) {
     try {
-      checkFile(pathway);
       const data = fs.readFileSync(pathway, 'utf8');
       result.status = 200;
       result.data = data;
     } catch (err) {
       result.status = 500;
-      result.data = err;
+      if (err.errno == -4058) {
+        result.data = '找不到文件';
+      } else {
+        result.data = err;
+      }
     }
     return result;
   },

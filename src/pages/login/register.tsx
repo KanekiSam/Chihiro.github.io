@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Select, Divider, message } from 'antd';
+import { Form, Input, Button, Select, Divider, message, Alert } from 'antd';
 import { questions } from '@/data/question';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
@@ -11,6 +11,7 @@ interface Props {}
 const Register: React.FC<Props> = props => {
   const [selectLists, setSelectLists] = useState([...questions]);
   const [customName, setCustomName] = useState('');
+  const [errTxt, setErrTxt] = useState('');
   const [form] = Form.useForm();
   const formlayout = {
     wrapperCol: { span: 16 },
@@ -27,10 +28,11 @@ const Register: React.FC<Props> = props => {
       manual: true,
       onSuccess: ({ data, status }) => {
         if (status == 200) {
-          return message.success(data);
-        }
-        if (status == 201) {
-          return message.warning(data);
+          message.success(data);
+          history.push('/login');
+        } else if (status == 202) {
+          setErrTxt(data);
+          message.warning(data);
         }
       },
       onError: res => {
@@ -52,10 +54,23 @@ const Register: React.FC<Props> = props => {
   };
   useEffect(() => {
     form.setFieldsValue({ questions: [{}] });
+    return () => {
+      setErrTxt('');
+    };
   }, []);
   return (
     <div className={styles.formContent}>
       <Form form={form} className={styles.formModule} onFinish={onsubmit}>
+        {errTxt && (
+          <Alert
+            showIcon
+            closable
+            onClose={() => setErrTxt('')}
+            message={errTxt}
+            type="error"
+            style={{ marginBottom: 10 }}
+          />
+        )}
         <Form.Item
           name="user"
           label="用户名"
@@ -103,12 +118,7 @@ const Register: React.FC<Props> = props => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item
-          label="设置找回密码的问题"
-          wrapperCol={{ span: 16 }}
-          labelCol={{ span: 8 }}
-          required
-        >
+        <Form.Item label="设置找回密码的问题" {...formlayout} required>
           <Form.List name="questions">
             {(fields, { add, remove }) => {
               return (
@@ -184,7 +194,7 @@ const Register: React.FC<Props> = props => {
                     <Button
                       type="dashed"
                       onClick={() => {
-                        if (fields.length != questions.length) {
+                        if (fields.length != selectLists.length) {
                           add();
                         }
                       }}
