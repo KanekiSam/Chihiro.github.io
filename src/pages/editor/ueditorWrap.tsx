@@ -17,7 +17,7 @@ const UeditorWrap: React.FC<Props> = props => {
   const [contentData, setContentData] = useState('');
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState('');
-  const key = props.location?.query?.key;
+  const id = props.location?.query?.id;
   const onChange = (val: any) => {
     setContentData(val);
   };
@@ -33,13 +33,13 @@ const UeditorWrap: React.FC<Props> = props => {
   const { loading, run, data: result } = useAsync(
     () => {
       return axios.get('/article/get/one', {
-        params: { createTime: props.location.query.key },
+        params: { id },
       });
     },
     { manual: true },
   );
   useEffect(() => {
-    if (key) {
+    if (id) {
       run();
     }
   }, []);
@@ -49,7 +49,7 @@ const UeditorWrap: React.FC<Props> = props => {
     }
   }, [result]);
   return (
-    <div style={{ marginTop: 10 }}>
+    <div style={{ margin: '10px auto 0' }}>
       <Spin spinning={loading}>
         <div className={styles.titleForm}>
           <span className={`${styles.label} ${styles.required}`}>文章名称</span>
@@ -65,12 +65,12 @@ const UeditorWrap: React.FC<Props> = props => {
             保存
           </Button>
         </div>
-        {(!key || result?.data) && (
+        {(!id || result?.data) && (
           <RcUeditor
             editorConfig={{
               initialFrameHeight: 680,
             }}
-            value={!key ? '' : result?.data?.content}
+            value={!id ? '' : result?.data?.content}
             onChange={onChange}
           />
         )}
@@ -78,7 +78,7 @@ const UeditorWrap: React.FC<Props> = props => {
           visible={visible}
           onToggle={bool => setVisible(bool)}
           articleData={{ title, content: contentData }}
-          id={props.location?.query?.key}
+          id={id}
           initData={result?.data}
         />
       </Spin>

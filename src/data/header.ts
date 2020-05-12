@@ -9,6 +9,6 @@ export const MenuLists: IMenuLists[] = [
   {
     title: '我的',
     path: '/myBlog',
-    children: [{ title: '编辑', path: '/ueditorWrap' }],
+    children: [{ title: '编辑', path: '/editor/ueditorWrap' }],
   },
 ];

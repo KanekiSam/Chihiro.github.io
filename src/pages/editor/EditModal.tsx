@@ -47,7 +47,7 @@ const EditModal: React.FC<Props> = props => {
         data,
       ).then(res => {
         if (res.status == 200) {
-          message.success(res.data);
+          message.success('操作成功');
           props.onToggle(false);
           history.push('/myBlog');
         } else {

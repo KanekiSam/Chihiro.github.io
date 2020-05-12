@@ -4,6 +4,7 @@ import styles from './index.less';
 import axios from 'axios';
 import { useAsync } from '@umijs/hooks';
 import { history } from 'umi';
+import { httpPost } from '../../utils/request';
 
 interface Props {}
 const RetrievePassword: React.FC<Props> = props => {
@@ -19,7 +20,7 @@ const RetrievePassword: React.FC<Props> = props => {
   };
   const { loading: loading1, run: getQuestionAsync } = useAsync(
     query => {
-      return axios.get('/article/get/questions', { params: query });
+      return axios.get('/user/get/questions', { params: query });
     },
     {
       manual: true,
@@ -37,25 +38,24 @@ const RetrievePassword: React.FC<Props> = props => {
   );
   const { loading: loading2, run: checkQuestionAsync } = useAsync(
     values => {
-      return axios.post('/article/check/questions', values);
+      return httpPost<string>('/user/check/questions', values);
     },
     {
       manual: true,
-      onSuccess: ({ data, status }) => {
-        if (status == 200) {
+      onSuccess: ({ data, success }) => {
+        if (success) {
           setStep(3);
           setErrtxt('');
           message.success('问题匹配正确');
         } else {
           setErrtxt(data);
-          message.warning(data);
         }
       },
     },
   );
   const { loading: loading3, run: checkPasswordAsync } = useAsync(
     query => {
-      return axios.get('/article/change/password', { params: query });
+      return axios.get('/user/change/password', { params: query });
     },
     {
       manual: true,

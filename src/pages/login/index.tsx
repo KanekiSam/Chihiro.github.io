@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, message, Alert } from 'antd';
 import styles from './index.less';
 import { history } from 'umi';
-import axios from 'axios';
+import { httpPost } from '../../utils/request';
+import { setToken } from '../../utils/getToken';
 
 interface Props {}
 const Login: React.FC<Props> = props => {
@@ -12,20 +13,15 @@ const Login: React.FC<Props> = props => {
   const onsubmit = () => {
     form.validateFields().then(async values => {
       setLoading(true);
-      axios
-        .post('/article/login', values)
-        .then(({ data, status }) => {
-          if (status == 200) {
-            message.success(data);
-            history.push('/');
-          } else {
-            setErrtxt(data);
-          }
-        })
-        .catch(err => {
-          // tslint:disable-next-line:no-console
-          console.debug(err);
-        });
+      httpPost<string>('/user/login', values).then(({ data, success }) => {
+        if (success) {
+          message.success('登录成功');
+          history.push('/');
+          setToken(data);
+        } else {
+          setErrtxt(data);
+        }
+      });
       setLoading(false);
     });
   };
@@ -74,7 +70,7 @@ const Login: React.FC<Props> = props => {
             </Button>
             <a
               style={{ marginLeft: 8 }}
-              onClick={() => history.push('/register')}
+              onClick={() => history.push('/login/register')}
             >
               去注册
             </a>
@@ -84,7 +80,7 @@ const Login: React.FC<Props> = props => {
                 marginLeft: 8,
                 textDecoration: 'underline',
               }}
-              onClick={() => history.push('/retrieve')}
+              onClick={() => history.push('/login/retrievePassword')}
             >
               忘记密码?
             </a>

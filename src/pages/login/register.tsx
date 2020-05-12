@@ -22,7 +22,7 @@ const Register: React.FC<Props> = props => {
   };
   const { loading, run } = useAsync<any>(
     values => {
-      return Axios.post('/article/register', values);
+      return Axios.post('/user/register', values);
     },
     {
       manual: true,
@@ -85,14 +85,14 @@ const Register: React.FC<Props> = props => {
           {...formlayout}
           rules={[
             { required: true, message: '密码不能为空' },
-            {
-              validator(rule, value, clb) {
-                if (value.length < 8) {
-                  clb('密码长度不能小于8');
-                }
-                clb();
-              },
-            },
+            // {
+            //   validator(rule, value, clb) {
+            //     if (value.length < 8) {
+            //       clb('密码长度不能小于8');
+            //     }
+            //     clb();
+            //   },
+            // },
           ]}
         >
           <Input.Password />

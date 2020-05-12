@@ -23,29 +23,34 @@ const MyBlog: React.FC<Props> = props => {
           type: number;
           articleType: string;
           title: string;
+          id: string;
         }[]
       >('/article/get/all');
     },
     { manual: true },
   );
   const { data: result, loading: deleteLoading, run: deleteFunc } = useAsync(
-    createTime => {
+    id => {
       return Axios.delete('/article/delete/one', {
-        params: { createTime },
+        params: { id },
       });
     },
-    { manual: true },
+    {
+      manual: true,
+      onSuccess: ({ data, status }) => {
+        if (status == 200) {
+          init();
+          message.success('删除成功');
+        }
+      },
+    },
   );
-  const ondelete = (createTime: number) => {
+  const ondelete = (id: string) => {
     Modal.confirm({
       title: '提示',
       content: '是否确认删除?',
       onOk: async () => {
-        deleteFunc(createTime);
-        if (result?.status == 200) {
-          init();
-          message.success(result?.data);
-        }
+        deleteFunc(id);
       },
       okText: '确定',
       cancelText: '取消',
@@ -59,7 +64,7 @@ const MyBlog: React.FC<Props> = props => {
       <Button
         type="primary"
         onClick={() => {
-          history.push('/ueditorWrap');
+          history.push('/editor/ueditorWrap');
         }}
       >
         新增
@@ -90,8 +95,8 @@ const MyBlog: React.FC<Props> = props => {
                 <EditOutlined
                   onClick={() => {
                     history.push({
-                      pathname: '/ueditorWrap',
-                      query: { key: item.createTime },
+                      pathname: '/editor/ueditorWrap',
+                      query: { id: item.id },
                     });
                   }}
                 />
@@ -99,7 +104,7 @@ const MyBlog: React.FC<Props> = props => {
                 {deleteLoading ? (
                   <LoadingOutlined />
                 ) : (
-                  <DeleteOutlined onClick={() => ondelete(item.createTime)} />
+                  <DeleteOutlined onClick={() => ondelete(item.id)} />
                 )}
               </span>
             </div>
