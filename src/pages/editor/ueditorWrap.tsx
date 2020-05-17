@@ -36,7 +36,14 @@ const UeditorWrap: React.FC<Props> = props => {
         params: { id },
       });
     },
-    { manual: true },
+    {
+      manual: true,
+      onSuccess({ data, success }) {
+        if (success) {
+          setContentData(data?.content);
+        }
+      },
+    },
   );
   useEffect(() => {
     if (id) {
@@ -65,15 +72,13 @@ const UeditorWrap: React.FC<Props> = props => {
             保存
           </Button>
         </div>
-        {(!id || result?.data) && (
-          <RcUeditor
-            editorConfig={{
-              initialFrameHeight: 680,
-            }}
-            value={!id ? '' : result?.data?.content}
-            onChange={onChange}
-          />
-        )}
+        <RcUeditor
+          editorConfig={{
+            initialFrameHeight: 680,
+          }}
+          value={contentData}
+          onChange={onChange}
+        />
         <EditModal
           visible={visible}
           onToggle={bool => setVisible(bool)}

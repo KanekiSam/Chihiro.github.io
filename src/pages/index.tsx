@@ -23,7 +23,6 @@ export default connect(({ user }) => ({ userInfo: user.userInfo }))(
         starRef.current?.appendChild(star);
       }
       // }, 100);
-      props.dispatch({ type: 'user/getUserInfo' });
     }, []);
     return (
       <div className={styles.homeModule}>

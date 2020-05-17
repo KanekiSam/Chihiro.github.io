@@ -46,15 +46,6 @@ const connectDb = (res, callback) => {
     }
   });
 };
-app.use('/user/api', (req, res, next) => {
-  const authrize = req.headers.authorization;
-  if (authrize) {
-    var auth = authrize.replace('Bearer ', '');
-    var token = decodeCrypto(auth);
-    token.split('-');
-    var user = token[2];
-  }
-});
 app.post('/user/register', function(req, res) {
   if (req.body) {
     const user = req.body.user;
@@ -264,7 +255,7 @@ app.get('/user/change/password', function(req, res) {
     res.status(400).send('参数错误');
   }
 });
-app.get('/user/get/info', function(req, res) {
+var getLoginUser = (req, res, callback) => {
   try {
     const authrize = req.headers.authorization;
     if (authrize) {
@@ -287,9 +278,7 @@ app.get('/user/get/info', function(req, res) {
                 .end();
             } else {
               var result = data[0];
-              return res
-                .status(200)
-                .send({ user: result.user, id: result._id });
+              return callback(result);
             }
           }
         });
@@ -300,4 +289,10 @@ app.get('/user/get/info', function(req, res) {
   } catch (err) {
     console.log(err);
   }
+};
+app.get('/user/get/info', function(req, res) {
+  getLoginUser(req, res, result => {
+    return res.status(200).send({ user: result.user, id: result._id });
+  });
 });
+module.exports = { getLoginUser };

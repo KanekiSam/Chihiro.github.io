@@ -3,10 +3,14 @@ import { MenuLists, IMenuLists } from '@/data/header';
 import styles from './blog.less';
 import { user } from '@/data/user';
 import { category } from '@/data/category';
+import { connect } from 'dva';
 import CommonLayout from './theme/common';
+import { EditOutlined } from '@ant-design/icons';
+import { history } from 'umi';
 
 interface Props {
   location?: any;
+  userInfo?: any;
 }
 const BlogLayout: React.FC<Props> = props => {
   const [selectKeys, setSelectKeys] = useState<string[]>(['/']);
@@ -38,8 +42,14 @@ const BlogLayout: React.FC<Props> = props => {
       <div className={styles.left}>
         <div className={`${styles.userCard} ${styles.block}`}>
           <img className={styles.avatar} src={user.avatar} />
-          <div className={styles.name}>{user.name}</div>
-          <div className={styles.describe}>{user.describe}</div>
+          <div className={styles.name}>{props.userInfo?.user}</div>
+          <div className={styles.describe}>
+            {props.userInfo?.describe ?? '[来写点什么吧]'}
+            <EditOutlined
+              style={{ color: 'blue', marginTop: 15 }}
+              onClick={() => history.push({ pathname: 'userCenter' })}
+            />
+          </div>
         </div>
         {category.map((item, key) => (
           <div key={key} className={`${styles.tags} ${styles.block}`}>
@@ -56,4 +66,4 @@ const BlogLayout: React.FC<Props> = props => {
     </CommonLayout>
   );
 };
-export default BlogLayout;
+export default connect(({ user }) => ({ userInfo: user.userInfo }))(BlogLayout);

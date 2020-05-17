@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Menu, Input } from 'antd';
 import { MenuLists, IMenuLists } from '@/data/header';
 import { Link } from 'umi';
 import styles from './common.less';
+import { connect } from 'dva';
 const { Search } = Input;
 
 interface Props {
   location?: any;
+  userInfo?: any;
 }
 const CommonLayout: React.FC<Props> = props => {
   const [selectKeys, setSelectKeys] = useState<string[]>(['/']);
@@ -21,8 +23,19 @@ const CommonLayout: React.FC<Props> = props => {
     }
     return data;
   };
+  const menulist = useMemo(() => {
+    return MenuLists.filter(item => {
+      if (item.userAuth) {
+        if (props.userInfo) {
+          return true;
+        }
+        return false;
+      }
+      return true;
+    });
+  }, [props.userInfo]);
   useEffect(() => {
-    for (var item of MenuLists) {
+    for (var item of menulist) {
       const data = getGroupLists(item, []);
       if (data.indexOf(props.location?.pathname) > -1) {
         if (data?.[0] && selectKeys[0] != data?.[0]) {
@@ -31,7 +44,7 @@ const CommonLayout: React.FC<Props> = props => {
         }
       }
     }
-  }, [props.location?.pathname]);
+  }, [props.location?.pathname, props.userInfo]);
 
   return (
     <div className={styles.blog}>
@@ -51,7 +64,7 @@ const CommonLayout: React.FC<Props> = props => {
             mode="horizontal"
             style={{ borderBottom: 0 }}
           >
-            {MenuLists.map(item => (
+            {menulist.map(item => (
               <Menu.Item
                 key={item.path}
                 onClick={() => {
@@ -71,4 +84,6 @@ const CommonLayout: React.FC<Props> = props => {
     </div>
   );
 };
-export default CommonLayout;
+export default connect(({ user }) => ({ userInfo: user.userInfo }))(
+  CommonLayout,
+);

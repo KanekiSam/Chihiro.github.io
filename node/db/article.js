@@ -1,4 +1,5 @@
 var { app, MongoClient, dbUrl } = require('./index.js');
+var { getLoginUser } = require('./user.js');
 
 const connectDb = (res, callback) => {
   MongoClient.connect(dbUrl, { useUnifiedTopology: true }, (err, db) => {
@@ -14,12 +15,22 @@ const connectDb = (res, callback) => {
     }
   });
 };
+app.use('/article', (req, res, next) => {
+  const authrize = req.headers.authorization;
+  if (authrize) {
+    next();
+  } else {
+    res.status(401).send('请先登录');
+  }
+});
 app.get('/article/get/all', function(req, res) {
   connectDb(res, (article, db) => {
-    article.find({}).toArray((err, docs) => {
-      res.send(docs);
-      res.end();
-      db.close();
+    getLoginUser(req, res, result => {
+      article.find({ user: result.user }).toArray((err, docs) => {
+        res.send(docs);
+        res.end();
+        db.close();
+      });
     });
   });
 });
@@ -79,13 +90,19 @@ app.put('/article/edit/one', (req, res) => {
 app.post('/article/create', function(req, res) {
   if (req.body) {
     connectDb(res, (article, db) => {
-      const gmt = new Date().getTime();
-      Object.assign(req.body, { id: gmt.toString(), createTime: gmt });
-      article.insertOne(req.body, (err, result) => {
-        if (!err) {
-          db.close();
-          res.send('保存成功');
-        }
+      getLoginUser(req, res, result => {
+        const gmt = new Date().getTime();
+        Object.assign(req.body, {
+          id: gmt.toString(),
+          createTime: gmt,
+          author: result.user,
+        });
+        article.insertOne(req.body, (err, result) => {
+          if (!err) {
+            db.close();
+            res.send('保存成功');
+          }
+        });
       });
     });
   } else {
