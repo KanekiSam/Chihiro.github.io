@@ -46,6 +46,15 @@ const connectDb = (res, callback) => {
     }
   });
 };
+app.use('/user/api', (req, res, next) => {
+  const authrize = req.headers.authorization;
+  if (authrize) {
+    var auth = authrize.replace('Bearer ', '');
+    var token = decodeCrypto(auth);
+    token.split('-');
+    var user = token[2];
+  }
+});
 app.post('/user/register', function(req, res) {
   if (req.body) {
     const user = req.body.user;
