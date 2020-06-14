@@ -34,6 +34,7 @@ const CommonLayout: React.FC<Props> = props => {
       return true;
     });
   }, [props.userInfo]);
+
   useEffect(() => {
     for (var item of menulist) {
       const data = getGroupLists(item, []);
